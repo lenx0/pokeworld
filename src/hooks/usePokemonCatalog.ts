@@ -14,7 +14,7 @@ export const usePokemonCatalog = () => {
   const [hasMore, setHasMore] = useState(true);
   const [total, setTotal] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResult, setSearchResult] = useState<Pokemon | null>(null);
+  const [searchResults, setSearchResults] = useState<Pokemon[]>([]);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const cache = useRef<Map<number, Pokemon>>(new Map());
@@ -60,16 +60,33 @@ export const usePokemonCatalog = () => {
   };
 
   const handleSearch = useCallback(async (query: string) => {
-    setSearchQuery(query);
+    const q = query.toLowerCase().trim();
+    setSearchQuery(q);
     setSearchError(null);
-    setSearchResult(null);
-    if (!query.trim()) return;
+    setSearchResults([]);
+
+    if (!q) return;
+
+    // Partial match on all cached pokémons first (instant)
+    const allCached = Array.from(cache.current.values());
+    const localMatches = allCached.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        String(p.id) === q
+    );
+
+    if (localMatches.length > 0) {
+      setSearchResults(localMatches.sort((a, b) => a.id - b.id));
+      return;
+    }
+
+    // Fall back to API for exact name / ID not yet loaded
     setSearching(true);
     try {
-      const poke = await fetchPokemon(query.toLowerCase().trim());
-      setSearchResult(poke);
+      const poke = await fetchPokemon(q);
+      setSearchResults([poke]);
     } catch {
-      setSearchError(`Pokémon "${query}" não encontrado.`);
+      setSearchError(`Nenhum Pokémon encontrado para "${query}".`);
     } finally {
       setSearching(false);
     }
@@ -77,7 +94,7 @@ export const usePokemonCatalog = () => {
 
   const clearSearch = () => {
     setSearchQuery('');
-    setSearchResult(null);
+    setSearchResults([]);
     setSearchError(null);
   };
 
@@ -90,7 +107,7 @@ export const usePokemonCatalog = () => {
     total,
     loadMore,
     searchQuery,
-    searchResult,
+    searchResults,
     searching,
     searchError,
     handleSearch,

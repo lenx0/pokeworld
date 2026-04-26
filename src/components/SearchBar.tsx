@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 interface SearchBarProps {
@@ -10,9 +10,26 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onClear, searching, searchQuery }) => {
   const [value, setValue] = useState('');
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Debounce live search
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!value.trim()) {
+      onClear();
+      return;
+    }
+    debounceRef.current = setTimeout(() => {
+      onSearch(value.trim());
+    }, 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [value]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (debounceRef.current) clearTimeout(debounceRef.current);
     if (value.trim()) onSearch(value.trim());
   };
 
@@ -24,7 +41,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onClear, searching, sea
   return (
     <form onSubmit={handleSubmit} className="relative w-full max-w-lg mx-auto">
       <div className="relative flex items-center">
-        {/* Ícone de pesquisa */}
+        {/* Ícone */}
         <div className="absolute left-4 text-white/40 pointer-events-none">
           {searching ? (
             <motion.div
@@ -76,3 +93,4 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onClear, searching, sea
 };
 
 export default SearchBar;
+
