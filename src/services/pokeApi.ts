@@ -7,6 +7,14 @@ import type {
   AbilityDetail,
 } from '../types/pokemon';
 
+export interface GenerationData {
+  id: number;
+  name: string;
+  main_region: { name: string; url: string };
+  version_groups: { name: string; url: string }[];
+  pokemon_species: { name: string; url: string }[];
+}
+
 const BASE = 'https://pokeapi.co/api/v2';
 
 const api = axios.create({ baseURL: BASE });
@@ -39,4 +47,22 @@ export const fetchEvolutionChain = async (url: string): Promise<EvolutionChain> 
 export const fetchAbility = async (url: string): Promise<AbilityDetail> => {
   const { data } = await axios.get<AbilityDetail>(url);
   return data;
+};
+
+export const fetchPokemonBatch = async (ids: number[]): Promise<Pokemon[]> => {
+  const results = await Promise.allSettled(
+    ids.map((id) => api.get<Pokemon>(`/pokemon/${id}`).then((r) => r.data))
+  );
+  return results
+    .filter((r): r is PromiseFulfilledResult<Pokemon> => r.status === 'fulfilled')
+    .map((r) => r.value);
+};
+
+export const fetchPokemonSpeciesBatch = async (ids: number[]): Promise<PokemonSpecies[]> => {
+  const results = await Promise.allSettled(
+    ids.map((id) => api.get<PokemonSpecies>(`/pokemon-species/${id}`).then((r) => r.data))
+  );
+  return results
+    .filter((r): r is PromiseFulfilledResult<PokemonSpecies> => r.status === 'fulfilled')
+    .map((r) => r.value);
 };
