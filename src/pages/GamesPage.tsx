@@ -3,6 +3,60 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GAME_GENERATIONS, SPINOFF_GAMES, type GameGeneration, type PokemonGame } from '../data/games';
 import { getPokemonImageUrl } from '../utils/pokemonUtils';
 
+/* ── Pokémon mascote de capa para cada jogo (por game.id) ───── */
+const GAME_MASCOTS: Record<number, number> = {
+  1: 6,    // Red → Charizard
+  2: 9,    // Blue → Blastoise
+  3: 25,   // Yellow → Pikachu
+  4: 250,  // Gold → Ho-Oh
+  5: 249,  // Silver → Lugia
+  6: 245,  // Crystal → Suicune
+  7: 383,  // Ruby → Groudon
+  8: 382,  // Sapphire → Kyogre
+  9: 6,    // FireRed → Charizard
+  10: 3,   // LeafGreen → Venusaur
+  11: 384, // Emerald → Rayquaza
+  12: 483, // Diamond → Dialga
+  13: 484, // Pearl → Palkia
+  14: 487, // Platinum → Giratina
+  15: 250, // HeartGold → Ho-Oh
+  16: 249, // SoulSilver → Lugia
+  17: 643, // Black → Reshiram
+  18: 644, // White → Zekrom
+  19: 646, // Black 2 → Kyurem
+  20: 646, // White 2 → Kyurem
+  21: 716, // X → Xerneas
+  22: 717, // Y → Yveltal
+  23: 383, // Omega Ruby → Groudon
+  24: 382, // Alpha Sapphire → Kyogre
+  25: 791, // Sun → Solgaleo
+  26: 792, // Moon → Lunala
+  27: 800, // Ultra Sun → Necrozma
+  28: 800, // Ultra Moon → Necrozma
+  29: 25,  // Let's Go Pikachu → Pikachu
+  30: 133, // Let's Go Eevee → Eevee
+  31: 888, // Sword → Zacian
+  32: 889, // Shield → Zamazenta
+  33: 483, // Brilliant Diamond → Dialga
+  34: 484, // Shining Pearl → Palkia
+  35: 493, // Legends: Arceus → Arceus
+  36: 1007,// Scarlet → Koraidon
+  37: 1008,// Violet → Miraidon
+};
+
+/* ── Pokémon mascote por geração ────────────────────────────── */
+const GEN_MASCOTS: Record<number, number> = {
+  1: 150,  // Mewtwo
+  2: 249,  // Lugia
+  3: 384,  // Rayquaza
+  4: 493,  // Arceus
+  5: 643,  // Reshiram
+  6: 716,  // Xerneas
+  7: 791,  // Solgaleo
+  8: 888,  // Zacian
+  9: 1007, // Koraidon
+};
+
 /* ── Platform badge ──────────────────────────────────────────── */
 const PlatformBadge: React.FC<{ platform: string }> = ({ platform }) => (
   <span className="font-body text-xs px-2 py-0.5 rounded-md bg-white/10 text-white/50 border border-white/10">
@@ -64,10 +118,20 @@ const GameModal: React.FC<{ game: PokemonGame; genColor: string; onClose: () => 
         <div className="flex items-start gap-4">
           {/* Game box illustration */}
           <div
-            className="w-20 h-24 rounded-xl flex-shrink-0 flex items-center justify-center text-3xl relative overflow-hidden"
+            className="w-20 h-24 rounded-xl flex-shrink-0 flex items-center justify-center relative overflow-hidden"
             style={{ background: `linear-gradient(135deg, ${game.color}, ${game.secondColor})` }}
           >
-            🎮
+            {GAME_MASCOTS[game.id] ? (
+              <img
+                src={getPokemonImageUrl(GAME_MASCOTS[game.id])}
+                alt={`mascote-${game.id}`}
+                className="w-20 h-20 object-contain drop-shadow-lg"
+                loading="lazy"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              />
+            ) : (
+              <span className="text-3xl">🎮</span>
+            )}
             {game.isRemake && (
               <span className="absolute bottom-1 font-body text-[8px] text-white/80 bg-black/40 px-1 rounded">
                 REMAKE
@@ -155,10 +219,20 @@ const GameCard: React.FC<{
 
       {/* Game box icon */}
       <div
-        className="w-14 flex-shrink-0 flex items-center justify-center text-2xl"
+        className="w-14 flex-shrink-0 flex items-center justify-center overflow-hidden"
         style={{ background: `${game.color}12` }}
       >
-        🎮
+        {GAME_MASCOTS[game.id] ? (
+          <img
+            src={getPokemonImageUrl(GAME_MASCOTS[game.id])}
+            alt={`mascote-${game.id}`}
+            className="w-12 h-12 object-contain drop-shadow"
+            loading="lazy"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+          />
+        ) : (
+          <span className="text-2xl">🎮</span>
+        )}
       </div>
 
       {/* Content */}
@@ -213,10 +287,24 @@ const GenSection: React.FC<{
         <div className="flex items-center gap-4">
           {/* Gen number badge */}
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 font-pokemon text-lg text-white"
+            className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 relative overflow-hidden"
             style={{ background: gen.color, boxShadow: `0 4px 20px ${gen.color}50` }}
           >
-            {gen.gen}
+            {GEN_MASCOTS[gen.gen] ? (
+              <img
+                src={getPokemonImageUrl(GEN_MASCOTS[gen.gen])}
+                alt={`gen-${gen.gen}-mascot`}
+                className="w-14 h-14 object-contain drop-shadow-lg scale-110"
+                loading="lazy"
+                onError={(e) => {
+                  const el = e.target as HTMLImageElement;
+                  el.style.display = 'none';
+                  el.parentElement!.innerHTML = `<span class="font-pokemon text-lg text-white">${gen.gen}</span>`;
+                }}
+              />
+            ) : (
+              <span className="font-pokemon text-lg text-white">{gen.gen}</span>
+            )}
           </div>
           <div>
             <p className="font-body text-white/40 text-xs uppercase tracking-widest mb-0.5">

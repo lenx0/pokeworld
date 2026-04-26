@@ -19,6 +19,7 @@ export interface Trainer {
   firstAppearance: string;
   goal: string;
   badge?: string;
+  spriteKey?: string;
 }
 
 export const TRAINERS: Trainer[] = [
@@ -44,6 +45,7 @@ export const TRAINERS: Trainer[] = [
     firstAppearance: 'Temporada 1 — Pokémon, eu escolho você! (1997)',
     goal: 'Tornar-se o maior Mestre Pokémon do mundo',
     badge: '🏆 Campeão Mundial',
+    spriteKey: 'ash',
   },
   {
     id: 2,
@@ -65,6 +67,7 @@ export const TRAINERS: Trainer[] = [
     ],
     firstAppearance: 'Temporada 1 — Ash Pega Pikachu (1997)',
     goal: 'Tornar-se a maior treinadora de Pokémon aquáticos do mundo',
+    spriteKey: 'misty',
   },
   {
     id: 3,
@@ -86,6 +89,7 @@ export const TRAINERS: Trainer[] = [
     ],
     firstAppearance: 'Temporada 1 — Showdown in Pewter City (1997)',
     goal: 'Tornar-se o melhor criador de Pokémon',
+    spriteKey: 'brock',
   },
   {
     id: 4,
@@ -107,6 +111,7 @@ export const TRAINERS: Trainer[] = [
     ],
     firstAppearance: 'Temporada 1 — Pokémon Emergency! (1997)',
     goal: 'Superar o Ash e se tornar Mestre Pokémon',
+    spriteKey: 'blue',
   },
   {
     id: 5,
@@ -128,6 +133,7 @@ export const TRAINERS: Trainer[] = [
     ],
     firstAppearance: 'Temporada 6 — Get the Show on the Road! (2002)',
     goal: 'Tornar-se a maior Pokémon Coordinator do mundo',
+    spriteKey: 'may',
   },
   {
     id: 6,
@@ -149,6 +155,7 @@ export const TRAINERS: Trainer[] = [
     ],
     firstAppearance: 'Temporada 10 — Following a Maiden\'s Voyage! (2007)',
     goal: 'Vencer o Grande Festival de Sinnoh',
+    spriteKey: 'dawn',
   },
   {
     id: 7,
@@ -170,6 +177,7 @@ export const TRAINERS: Trainer[] = [
     firstAppearance: 'Temporada 14 — In the Shadow of Zekrom! (2011)',
     goal: 'Tornar-se Mestra dos Pokémon Dragão',
     badge: '🏆 Campeã de Unova',
+    spriteKey: 'iris',
   },
   {
     id: 8,
@@ -189,6 +197,7 @@ export const TRAINERS: Trainer[] = [
     ],
     firstAppearance: 'Temporada 17 — Kalos, Where Dreams and Adventures Begin! (2014)',
     goal: 'Tornar-se grande Pokémon Performer',
+    spriteKey: 'serena',
   },
   {
     id: 9,
@@ -234,6 +243,7 @@ export const TRAINERS: Trainer[] = [
     firstAppearance: 'Temporada 10 — Top-Down Training! (2008)',
     goal: 'Explorar e proteger os mistérios do mundo Pokémon',
     badge: '🏆 Campeã de Sinnoh',
+    spriteKey: 'cynthia',
   },
   {
     id: 11,
@@ -255,6 +265,7 @@ export const TRAINERS: Trainer[] = [
     firstAppearance: 'Temporada 5 — Talkin\' \'Bout an Evolution (2001)',
     goal: 'Proteger o mundo Pokémon usando o poder dos Dragões',
     badge: '🏆 Campeão de Johto',
+    spriteKey: 'lance',
   },
   {
     id: 12,
@@ -276,6 +287,7 @@ export const TRAINERS: Trainer[] = [
     ],
     firstAppearance: 'Temporada 1 — Battle Aboard the St. Anne (1997)',
     goal: 'Dominar o mundo usando o poder dos Pokémon',
+    spriteKey: 'giovanni',
   },
   {
     id: 13,
@@ -296,6 +308,7 @@ export const TRAINERS: Trainer[] = [
     ],
     firstAppearance: 'Temporada 1 — Pokémon Emergency! (1997)',
     goal: 'Capturar o Pikachu de Ash para o Team Rocket',
+    spriteKey: 'jessiejames-gen1',
   },
   {
     id: 14,
@@ -319,6 +332,7 @@ export const TRAINERS: Trainer[] = [
     firstAppearance: 'Pokémon Red/Green (1996) — Anime: Temporada 14',
     goal: 'O treinamento perfeito no cume do Monte Silver',
     badge: '🏆 Campeão de Kanto',
+    spriteKey: 'red',
   },
   {
     id: 15,

@@ -96,12 +96,23 @@ const TrainerModal: React.FC<{
 
             {/* Avatar circle */}
             <div
-              className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4"
+              className="w-20 h-20 rounded-2xl flex items-center justify-center mb-4 overflow-hidden"
               style={{ background: `linear-gradient(135deg, ${trainer.primaryColor}, ${trainer.secondaryColor})` }}
             >
-              <span className="font-pokemon text-2xl text-white">
-                {trainer.name.charAt(0)}
-              </span>
+              {trainer.spriteKey ? (
+                <img
+                  src={`https://play.pokemonshowdown.com/sprites/trainers/${trainer.spriteKey}.png`}
+                  alt={trainer.name}
+                  className="w-full h-full object-contain"
+                  onError={(e) => {
+                    const el = e.target as HTMLImageElement;
+                    el.style.display = 'none';
+                    el.parentElement!.innerHTML = `<span class="font-pokemon text-2xl text-white">${trainer.name.charAt(0)}</span>`;
+                  }}
+                />
+              ) : (
+                <span className="font-pokemon text-2xl text-white">{trainer.name.charAt(0)}</span>
+              )}
             </div>
 
             {/* Name & role */}
@@ -229,10 +240,23 @@ const TrainerCard: React.FC<{
         <div className="flex gap-4 items-start">
           {/* Avatar */}
           <div
-            className="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center font-pokemon text-xl text-white"
+            className="flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center font-pokemon text-xl text-white overflow-hidden"
             style={{ background: `linear-gradient(135deg, ${trainer.primaryColor}, ${trainer.secondaryColor})` }}
           >
-            {trainer.name.charAt(0)}
+            {trainer.spriteKey ? (
+              <img
+                src={`https://play.pokemonshowdown.com/sprites/trainers/${trainer.spriteKey}.png`}
+                alt={trainer.name}
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  const el = e.target as HTMLImageElement;
+                  el.style.display = 'none';
+                  el.parentElement!.innerHTML = trainer.name.charAt(0);
+                }}
+              />
+            ) : (
+              trainer.name.charAt(0)
+            )}
           </div>
 
           {/* Info */}
